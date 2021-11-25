@@ -1,5 +1,5 @@
 {
-  "name": "iridium-js",
+  "name": "iridium-3d",
   "version": "1.0.0",
   "description": "TypeScript project boilerplate with live reloading.",
   "main": "index.js",
@@ -13,6 +13,7 @@
   "author": "Karolis Strazdas",
   "license": "MIT",
   "devDependencies": {
+    "@types/three": "^0.134.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^10.0.0",
     "css-loader": "^6.5.1",
@@ -29,5 +30,9 @@
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "postprocessing": "^6.23.2",
+    "three": "^0.134.0",
+    "three-mesh-bvh": "^0.5.2"
+  }
 }
