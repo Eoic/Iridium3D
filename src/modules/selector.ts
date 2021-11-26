@@ -1,6 +1,17 @@
-class Selector {
-    
-}
+export class Selector {
+    select() {
+        
+    }
 
-export { Selector };
-export default Selector;
+    deselect() {
+
+    }
+
+    selectAll() {
+
+    }
+
+    deselectAll() {
+
+    }
+}
