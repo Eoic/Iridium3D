@@ -7,8 +7,7 @@
         "noImplicitAny": false,
         "module": "es6",
         "moduleResolution": "node",
-        "jsx": "react",
-        "jsxFactory": "jsx",
+        "esModuleInterop": true,
         "target": "es5",
         "allowJs": true,
         "lib": [
