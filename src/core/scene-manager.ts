@@ -32,7 +32,7 @@ export class SceneManager {
             powerPreference: 'high-performance'
         });
         this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 5000);
+        this.camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.spotLight = new THREE.SpotLight(0xFFeeb1, 0.8);
         this.scene = new Scene();
@@ -56,7 +56,8 @@ export class SceneManager {
         this.scene.add(hemiLight);
         this.scene.add(this.spotLight);
         this.scene.add(this.camera);
-        
+        var grid = new THREE.GridHelper( 2000, 400, 0xFFFFFF, 0xFFFFFF);
+        // this.scene.add( grid );
         this.grid.attach(this.scene);
     }
 

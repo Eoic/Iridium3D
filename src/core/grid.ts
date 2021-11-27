@@ -18,24 +18,15 @@ export class Grid {
 
         const geometry = new THREE.PlaneBufferGeometry(2, 2, 1, 1);
         const material = new THREE.ShaderMaterial({
-            side: THREE.DoubleSide,
-            depthWrite: false,
-
             uniforms: {
-                uinnerSize1: {
-                    value: this.innerSize,
-                },
-                uinnerSize: {
-                    value: this.outerSize,
-                },
-                uColor: {
-                    value: this.color,
-                },
-                uDistance: {
-                    value: this.distance,
-                },
+                uColor: { value: this.color },
+                uDistance: { value: this.distance },
+                uInnerSize: { value: this.innerSize },
+                uOuterSize: { value: this.outerSize },
             },
+            depthWrite: false,
             transparent: true,
+            side: THREE.DoubleSide,
             vertexShader: gridVertexShader,
             fragmentShader: gridFragmentShader,
             extensions: { derivatives: true },

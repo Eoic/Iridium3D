@@ -9,7 +9,7 @@ const geometry =  new THREE.SphereBufferGeometry(1, 10, 10)
 const material = new THREE.MeshPhongMaterial( { color: 0x00ff00, flatShading: true } );
 const cube = new THREE.Mesh( geometry, material );
 const cube1 = new THREE.Mesh( geometry, material );
-cube.position.set(1, 0, 0);
+cube.position.set(10, 0, 0);
 cube1.renderOrder = 10000;
 
 
@@ -18,7 +18,7 @@ sceneManager.camera.position.set(10, 10, 10);
 const axes = new THREE.AxesHelper(500);
 sceneManager.addObject(cube);
 sceneManager.addObject(cube1);
-sceneManager.addObject(axes);
+// sceneManager.addObject(axes);
 
 // import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
