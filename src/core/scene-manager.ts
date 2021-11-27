@@ -9,7 +9,7 @@
 import * as THREE from 'three';
 import { Module } from '../modules/module';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { Camera, Light, Object3D, OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import { Object3D, OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import { Grid } from './grid';
 
@@ -31,11 +31,12 @@ export class SceneManager {
             antialias: true,
             powerPreference: 'high-performance'
         });
+        this.renderer.setPixelRatio(window.devicePixelRatio);
         this.camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 5000);
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.spotLight = new THREE.SpotLight(0xFFeeb1, 0.8);
         this.scene = new Scene();
-        this.grid = new Grid(2, 10, 'white', 200);
+        this.grid = new Grid(2, 10, 0xFFFFFF, 500);
         this.setupScene();
         this.addEvents();
         this.render();
