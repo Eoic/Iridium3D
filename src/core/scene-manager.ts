@@ -35,7 +35,7 @@ export class SceneManager {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.spotLight = new THREE.SpotLight(0xFFeeb1, 0.8);
         this.scene = new Scene();
-        this.grid = new Grid(5, 50, 'white', 1000);
+        this.grid = new Grid(2, 10, 'white', 200);
         this.setupScene();
         this.addEvents();
         this.render();
@@ -84,5 +84,12 @@ export class SceneManager {
 
     addObject(object: Object3D) {
         this.scene.add(object);
+    }
+
+    // Methods which are not supposed to be called directly but instead after some action (e.g. after adding / removing object).
+
+    // update scene intersectables and recompute bounding trees.
+    updateIntersectables() {
+
     }
 }
