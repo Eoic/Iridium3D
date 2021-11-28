@@ -13,6 +13,7 @@
   "author": "Karolis Strazdas",
   "license": "MIT",
   "devDependencies": {
+    "@types/stats.js": "^0.17.0",
     "@types/three": "^0.134.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^10.0.0",
@@ -33,6 +34,7 @@
   },
   "dependencies": {
     "postprocessing": "^6.23.2",
+    "stats.js": "^0.17.0",
     "three": "^0.134.0",
     "three-mesh-bvh": "^0.5.2"
   }

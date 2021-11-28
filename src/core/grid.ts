@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Color, Mesh, Scene } from 'three';
+import { Color, Mesh, Object3D, Scene } from 'three';
 import gridFragmentShader from '../shaders/grid/grid-fragment.glsl';
 import gridVertexShader from '../shaders/grid/grid-vertex.glsl';
 
@@ -37,6 +37,8 @@ export class Grid {
     }
 
     public attach(scene: Scene) {
-        scene.add(this.mesh);
+        const wrapper = new Object3D();
+        wrapper.add(this.mesh);
+        scene.add(wrapper);
     }
 }
