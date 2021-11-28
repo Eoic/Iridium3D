@@ -7,6 +7,7 @@
     "dev": "npm run bundle && npm-run-all --parallel watch start:dev",
     "watch": "webpack --watch",
     "start": "cd dist && live-server",
+    "serve": "serve dist/",
     "bundle": "webpack",
     "build": "webpack --mode=production"
   },
@@ -35,6 +36,7 @@
   },
   "dependencies": {
     "postprocessing": "^6.23.2",
+    "serve": "^13.0.2",
     "stats.js": "^0.17.0",
     "three": "^0.134.0",
     "three-mesh-bvh": "^0.5.2"
