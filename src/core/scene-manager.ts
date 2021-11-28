@@ -9,7 +9,7 @@
 import * as THREE from 'three';
 import { Module } from '../modules/module';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { Frustum, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from 'three';
+import { Color, Frustum, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import { Grid } from './grid';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
@@ -24,6 +24,11 @@ import Stats from 'stats.js'
 
 type Controls = OrbitControls | TrackballControls;
 
+export enum OutlinePassOrder {
+    First,
+    Second
+}
+
 export class SceneManager {
     public camera: PerspectiveCamera | OrthographicCamera;
     private modules: Module[];
@@ -35,8 +40,7 @@ export class SceneManager {
     public intersectables: Array<Object3D> = []; 
     private frustum: Frustum = new Frustum();
     private stats: Stats;
-    public outlinePassFirst!: OutlinePass;
-    public outlinePassSecond!: OutlinePass;
+    private outlinePassMap: Map<OutlinePassOrder, OutlinePass>;
 
     constructor() {
         this.modules = [];
@@ -50,6 +54,7 @@ export class SceneManager {
         this.grid = new Grid(2, 10, 0xFFFFFF, 500);
         this.scene = new Scene();
         this.stats = new Stats();
+        this.outlinePassMap = new Map();
         this.setupScene();
         this.setupLights();
         this.setupRenderer();
@@ -78,15 +83,22 @@ export class SceneManager {
 
     setupRenderer() {
         const fxaaPass = new ShaderPass(FXAAShader);
-        this.outlinePassFirst = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.scene, this.camera);
-        this.outlinePassSecond = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.scene, this.camera);
+        const outlinePassFirst = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.scene, this.camera);
+        const outlinePassSecond = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.scene, this.camera);
         fxaaPass.uniforms[ 'resolution' ].value.set(1 / window.innerWidth, 1 / window.innerHeight);
-
+        outlinePassFirst.edgeStrength = 10;
+        outlinePassSecond.edgeStrength = 10;
+        outlinePassFirst.visibleEdgeColor = new Color(0xFFFFFF);
+        outlinePassFirst.hiddenEdgeColor = new Color(0xFFFFFF);
+        outlinePassSecond.visibleEdgeColor = new Color(0xFFA500);
+        outlinePassSecond.hiddenEdgeColor = new Color(0xFFA500);
         this.composer = new EffectComposer(this.renderer);
         this.composer.addPass(new RenderPass(this.scene, this.camera));
-        this.composer.addPass(this.outlinePassFirst);
-        this.composer.addPass(this.outlinePassSecond);
+        this.composer.addPass(outlinePassFirst);
+        this.composer.addPass(outlinePassSecond);
         this.composer.addPass(fxaaPass);
+        this.outlinePassMap.set(OutlinePassOrder.First, outlinePassFirst);
+        this.outlinePassMap.set(OutlinePassOrder.Second, outlinePassSecond);
         // this.frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
     }
 
@@ -152,6 +164,17 @@ export class SceneManager {
         this.scene.add(object);
         this.updateIntersectables();
     }
+
+
+    updateOutlinePass(order: OutlinePassOrder, callback: (outlinePass: OutlinePass) => void) {
+        const outlinePass = this.outlinePassMap.get(order);
+
+        if (outlinePass)
+            return callback(outlinePass);
+
+        throw new Error('Cannot find specified outline pass layer.')
+    }
+
 
     /**
      * Updates list of raycastable objects.
