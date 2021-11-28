@@ -7,7 +7,8 @@
     "start": "npm run bundle && npm-run-all --parallel watch serve",
     "watch": "webpack --watch",
     "serve": "cd dist && live-server",
-    "bundle": "webpack"
+    "bundle": "webpack",
+    "build": "webpack --mode=production"
   },
   "keywords": [],
   "author": "Karolis Strazdas",
