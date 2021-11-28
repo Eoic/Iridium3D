@@ -1,8 +1,7 @@
 import { Module } from './module';
-import { OutlinePassOrder, SceneManager } from '../core/scene-manager';
-import { CustomMouseEvent, Event, EventManager, EventPayload } from '../core/event-manager';
 import { Events } from '../core/events';
-import { Color, Material, Mesh, MeshBasicMaterial, Object3D } from 'three';
+import { OutlinePassOrder, SceneManager } from '../core/scene-manager';
+import { CustomMouseEvent, EventManager, EventPayload } from '../core/event-manager';
 
 export class Selector extends Module {
     private cameraMoved: boolean;
