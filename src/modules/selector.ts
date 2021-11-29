@@ -1,20 +1,30 @@
 import { Module } from './module';
-import { Events } from '../core/events';
 import { OutlinePassOrder, SceneManager } from '../core/scene-manager';
-import { CustomMouseEvent, EventManager, EventPayload } from '../core/event-manager';
+import { CustomKeyboardEvent, CustomMouseEvent, EventManager, EventPayload } from '../core/event-manager';
+import { Events } from '../core/events'
 
 export class Selector extends Module {
     private cameraMoved: boolean;
     private mouseReleased: boolean;
+    private multiSelect: boolean;
 
     public constructor(sceneManager: SceneManager) {
         super(sceneManager);
         this.cameraMoved = false;
         this.mouseReleased = true;
+        this.multiSelect = false;
         this.addEvents();
     }
 
     addEvents() {
+        EventManager.on(Events.Key, (event: EventPayload<KeyboardEvent, CustomKeyboardEvent>) => {
+            if (event.originalData.code == 'ControlLeft')
+                if (event.customData.keyState.isPressed)
+                    this.multiSelect = true;
+                else if (event.customData.keyState.isReleased)
+                    this.multiSelect = false;
+        });
+
         EventManager.on(Events.MouseWheel, () => {
             this.cameraMoved = false;
         });
@@ -30,7 +40,7 @@ export class Selector extends Module {
 
         EventManager.on(Events.MouseMove, (event: EventPayload<MouseEvent, CustomMouseEvent>) => {
             this.sceneManager.updateOutlinePass(OutlinePassOrder.First, (outlinePass) => {
-                if (event.customData.intersection)
+                if (event.customData.intersection && !event.customData.intersection.object.userData.isSelected)
                     outlinePass.selectedObjects = [event.customData.intersection.object];
                 else outlinePass.selectedObjects = [];
 
@@ -43,9 +53,19 @@ export class Selector extends Module {
             this.sceneManager.updateOutlinePass(OutlinePassOrder.Second, (outlinePass) => {
                 if (event.customData.intersection && !this.cameraMoved && this.mouseReleased) {
                     const object = event.customData.intersection?.object;
-                    object.userData.isSelected = !object.userData.isSelected;
+
+                    if (!this.multiSelect)
+                        this.sceneManager.scene.children.forEach(sceneObject => sceneObject.userData.isSelected = false)
+
+                    object.userData.isSelected = true;
+
                     outlinePass.selectedObjects = this.sceneManager.scene.children.filter(sceneObject => sceneObject.userData.isSelected);
                     this.cameraMoved = false;
+
+                    this.sceneManager.updateOutlinePass(OutlinePassOrder.First, (outlinePass) => {
+                        outlinePass.selectedObjects = outlinePass.selectedObjects.filter(selectedObject => selectedObject.id !== object.id);
+                    });
+
                     return;
                 }
     

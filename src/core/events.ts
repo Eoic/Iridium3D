@@ -3,5 +3,6 @@ export enum Events {
     MouseClick = 'click',
     MouseUp = 'mouseup',
     MouseWheel = 'wheel',
-    CameraMove = 'cameramove'
+    CameraMove = 'cameramove',
+    Key = 'key'
 };

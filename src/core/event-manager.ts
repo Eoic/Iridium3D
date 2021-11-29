@@ -1,10 +1,15 @@
 import { Intersection, Object3D, Vector2 } from 'three';
+import { KeyState } from './input-manager';
 
 export interface CustomEvent {}
 
 export interface CustomMouseEvent {
     normalizedPosition: Vector2,
     intersection?: Intersection 
+}
+
+export interface CustomKeyboardEvent {
+    keyState: KeyState
 }
 
 export class EventPayload<OriginalEvent, CustomEvent> {

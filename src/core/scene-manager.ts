@@ -11,6 +11,7 @@ import { Module } from '../modules/module';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Color, Frustum, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+import Stats from 'stats.js'
 import { Grid } from './grid';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -20,7 +21,7 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { CustomEvent, CustomMouseEvent, EventManager, EventPayload } from './event-manager';
 import { Events } from './events';
 import { Physics } from './physics';
-import Stats from 'stats.js'
+import { InputManager } from './input-manager';
 
 type Controls = OrbitControls | TrackballControls;
 
@@ -41,6 +42,7 @@ export class SceneManager {
     private frustum: Frustum = new Frustum();
     private stats: Stats;
     private outlinePassMap: Map<OutlinePassOrder, OutlinePass>;
+    private inputManager: InputManager;
 
     constructor() {
         this.modules = [];
@@ -55,12 +57,18 @@ export class SceneManager {
         this.scene = new Scene();
         this.stats = new Stats();
         this.outlinePassMap = new Map();
+        this.inputManager = InputManager.instance;
         this.setupScene();
         this.setupLights();
         this.setupRenderer();
         this.addEvents();
         this.setupDebugInfo();
+        this.bindKeys();
         this.render();
+    }
+
+    bindKeys() {
+        this.inputManager.addKey('ControlLeft');
     }
 
     setupScene() {
@@ -158,6 +166,7 @@ export class SceneManager {
         this.controls.update();
         this.composer!.render();
         this.stats.update();
+        this.inputManager.update();
     }
 
     /**
