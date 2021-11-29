@@ -4,7 +4,7 @@
   "description": "TypeScript project boilerplate with live reloading.",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run bundle && npm-run-all --parallel watch start:dev",
+    "dev": "npm run bundle && npm-run-all --parallel watch start",
     "watch": "webpack --watch",
     "start": "cd dist && live-server",
     "serve": "serve dist/",

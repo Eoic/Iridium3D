@@ -15,6 +15,10 @@ export class Selector extends Module {
     }
 
     addEvents() {
+        EventManager.on(Events.MouseWheel, () => {
+            this.cameraMoved = false;
+        });
+
         EventManager.on(Events.CameraMove, () => {
             this.cameraMoved = true;
             this.mouseReleased = false;

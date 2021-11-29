@@ -137,12 +137,16 @@ export class SceneManager {
                 controlsInitChange = false;
                 return;
             }
-
+            
             EventManager.dispatch(Events.CameraMove, new EventPayload<MouseEvent, CustomEvent>(event, {}));
         });
 
         window.addEventListener('mouseup', (event) => {
             EventManager.dispatch(Events.MouseUp, new EventPayload<MouseEvent, CustomEvent>(event, {}));
+        });
+
+        window.addEventListener('wheel', (event) => {
+            EventManager.dispatch(Events.MouseWheel, new EventPayload<MouseEvent, CustomEvent>(event, {}));
         });
     }
 
