@@ -13,7 +13,7 @@ import { Color, Frustum, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import Stats from 'stats.js'
 import { Grid } from './grid';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
@@ -25,9 +25,9 @@ import { InputManager } from './input-manager';
 
 type Controls = OrbitControls | TrackballControls;
 
-export enum OutlinePassOrder {
-    First,
-    Second
+export enum RenderPassType {
+    OutlinePassOne,
+    OutlinePassTwo,
 }
 
 export class SceneManager {
@@ -41,8 +41,8 @@ export class SceneManager {
     public intersectables: Array<Object3D> = []; 
     private frustum: Frustum = new Frustum();
     private stats: Stats;
-    private outlinePassMap: Map<OutlinePassOrder, OutlinePass>;
     private inputManager: InputManager;
+    public renderPassMap: Map<RenderPassType, Pass>;
 
     constructor() {
         this.modules = [];
@@ -56,7 +56,7 @@ export class SceneManager {
         this.grid = new Grid(2, 10, 0xFFFFFF, 500);
         this.scene = new Scene();
         this.stats = new Stats();
-        this.outlinePassMap = new Map();
+        this.renderPassMap = new Map();
         this.inputManager = InputManager.instance;
         this.setupScene();
         this.setupLights();
@@ -69,6 +69,7 @@ export class SceneManager {
 
     bindKeys() {
         this.inputManager.addKey('ControlLeft');
+        this.inputManager.addKey('ShiftLeft');
     }
 
     setupScene() {
@@ -105,8 +106,8 @@ export class SceneManager {
         this.composer.addPass(outlinePassFirst);
         this.composer.addPass(outlinePassSecond);
         this.composer.addPass(fxaaPass);
-        this.outlinePassMap.set(OutlinePassOrder.First, outlinePassFirst);
-        this.outlinePassMap.set(OutlinePassOrder.Second, outlinePassSecond);
+        this.renderPassMap.set(RenderPassType.OutlinePassOne, outlinePassFirst);
+        this.renderPassMap.set(RenderPassType.OutlinePassTwo, outlinePassSecond);
         // this.frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
     }
 
@@ -177,17 +178,6 @@ export class SceneManager {
         this.scene.add(object);
         this.updateIntersectables();
     }
-
-
-    updateOutlinePass(order: OutlinePassOrder, callback: (outlinePass: OutlinePass) => void) {
-        const outlinePass = this.outlinePassMap.get(order);
-
-        if (outlinePass)
-            return callback(outlinePass);
-
-        throw new Error('Cannot find specified outline pass layer.')
-    }
-
 
     /**
      * Updates list of raycastable objects.
