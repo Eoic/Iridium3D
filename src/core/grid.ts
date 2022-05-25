@@ -3,6 +3,7 @@ import { Color, Mesh, Object3D, Scene } from 'three';
 import gridFragmentShader from '../shaders/grid/grid-fragment.glsl';
 import gridVertexShader from '../shaders/grid/grid-vertex.glsl';
 
+
 export class Grid {
     private color: Color;
     private innerSize: number;
