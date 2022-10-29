@@ -13,12 +13,15 @@
     "@emotion/styled": "^11.10.4",
     "@fontsource/roboto": "^4.5.8",
     "@mui/material": "^5.10.4",
-    "babylonjs": "^5.23.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
+    "@babylonjs/core": "^5.30.0",
+    "@babylonjs/loaders": "^5.30.0",
+    "@babylonjs/materials": "^5.30.0",
+    "@babylonjs/post-processes": "^5.30.0",
     "@types/node": "^18.8.5",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
