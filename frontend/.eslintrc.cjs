@@ -14,7 +14,8 @@ module.exports = {
         "project": "./tsconfig.json",
         "ecmaFeatures": {
             "jsx": true
-        }
+        },
+        tsconfigRootDir: __dirname
     },
     "plugins": [
         "@typescript-eslint"
