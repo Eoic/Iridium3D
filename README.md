@@ -9,4 +9,4 @@ To run the project:
   * Create and migrate your database with `mix ecto.setup`
   * Start Phoenix server and React client  `mix phx.server`
 
-Visit [`localhost:4000`](http://localhost:4000) to access the server and [`localhost:5137`](http://localhost:5137) to access the client.
+Visit [`localhost:4000`](http://localhost:4000) to access the server and [`localhost:5137`](http://localhost:5173) to access the client.
